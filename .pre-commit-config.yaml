@@ -16,3 +16,11 @@ repos:
   rev: 5.12.0
   hooks:
   - id: isort
+
+- repo: local
+  hooks:
+  - id: pyre
+    name: pyre
+    entry: pyre
+    language: system
+    pass_filenames: false
