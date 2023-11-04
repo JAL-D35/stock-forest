@@ -38,7 +38,7 @@ def convert_to_df(spark: SparkSession, rdd: RDD[str]) -> DataFrame:
     return spark.read.json(rdd)
 
 
-def check_output_dir(mrkt_cls: str, dir_name: str) -> None:
+def clean_output_dir(mrkt_cls: str, dir_name: str) -> None:
     if exists(f"./{mrkt_cls}_{dir_name}"):
         rmtree(f"./{mrkt_cls}_{dir_name}")
 
