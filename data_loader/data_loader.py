@@ -15,8 +15,10 @@ def generate_url_params(**kwargs) -> dict:
     return params
 
 
-def get_data(url: str, params: dict) -> str:
-    return get(url, params=params).text
+def get_data(url: str, params: dict) -> Optional[str]:
+    response = get(url, params=params)
+    if response.status_code == 200:
+        return response.text
 
 
 def data_to_dict(data: str) -> dict:
