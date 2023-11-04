@@ -7,14 +7,10 @@ from requests import get
 from xmltodict import parse
 
 
-def generate_url_params(**kwargs):
+def generate_url_params(**kwargs) -> dict:
     params = {}
     params.update(kwargs)
     return params
-
-
-def enter_service_key(url: str, service_key: str):
-    return f"{url}?serviceKey={service_key}"
 
 
 def get_data(url: str, params: dict):
@@ -45,5 +41,5 @@ def check_output_dir(mrkt_cls: str, dir_name: str):
         rmtree(f"./{mrkt_cls}_{dir_name}")
 
 
-def save_as_text(df, mrkt_cls: str, dir_name: str):
+def save_as_text(df: DataFrame, mrkt_cls: str, dir_name: str):
     df.write.json(f"./{mrkt_cls}_{dir_name}")
