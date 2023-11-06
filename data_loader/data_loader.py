@@ -47,3 +47,7 @@ def clean_output_dir(mrkt_cls: str, dir_name: str) -> None:
 
 def save_as_text(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
     df.write.json(f"./{mrkt_cls}_{dir_name}")
+
+
+def save_as_parquet(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
+    df.write.parquet(f"./{mrkt_cls}_{dir_name}")
