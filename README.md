@@ -25,6 +25,6 @@ poetry install
 
 #### Install
 
-```
+```sh
 pre-commit install --install-hooks
 ```
