@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -7,7 +7,7 @@ def is_weekend(input_date: date) -> bool:
 
 
 def convert_to_date(date_str: str) -> date:
-    return date(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:]))
+    return datetime.strptime(date_str, "%Y%m%d").date()
 
 
 def get_holiday_info(data: Dict[str, Any]) -> Optional[List[Dict[str, str]]]:
@@ -17,7 +17,7 @@ def get_holiday_info(data: Dict[str, Any]) -> Optional[List[Dict[str, str]]]:
         return
 
 
-def get_holiday_date(data: List[Dict[str, str]]) -> Optional[List[str]]:
+def get_holiday_date(data: List[Dict[str, str]]) -> List[str]:
     return [holiday["locdate"] for holiday in data]
 
 
