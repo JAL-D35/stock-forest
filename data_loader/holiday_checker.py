@@ -1,9 +1,20 @@
 from datetime import date, datetime
+from enum import IntEnum
 from typing import Any, Dict, List, Optional
 
 
-def is_weekend(input_date: date) -> bool:
-    return input_date.weekday() > 4
+class Weekday(IntEnum):
+    MONDAY = 0
+    TUESDAY = 1
+    WEDNESDAY = 2
+    THURSDAY = 3
+    FRIDAY = 4
+    SATURDAY = 5
+    SUNDAY = 6
+
+    @classmethod
+    def is_weekend(cls, input_date: date) -> bool:
+        return cls(input_date.weekday()) > cls.FRIDAY
 
 
 def convert_to_date(date_str: str) -> date:
