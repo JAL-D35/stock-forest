@@ -54,3 +54,8 @@ def save_as_text(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
 
 def save_as_parquet(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
     df.write.parquet(f"./{mrkt_cls}_{dir_name}")
+
+
+def test_ci() -> str:
+    string_variable: int = "string variable"
+    return string_variable
