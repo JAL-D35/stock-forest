@@ -1,8 +1,6 @@
 from datetime import date
 from typing import Optional
 
-from data_loader import data_to_dict, generate_url_params, get_data
-
 
 def is_weekend(input_date: str) -> bool:
     return input_date.weekday() > 4
