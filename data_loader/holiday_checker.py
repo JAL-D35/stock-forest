@@ -19,7 +19,7 @@ def get_holiday_info(data: dict) -> Optional[list]:
         return
 
 
-def get_holiday_date(data: list) -> Optional[set]:
+def get_holiday_date(data: list) -> Optional[list]:
     return [holiday["locdate"] for holiday in data]
 
 
