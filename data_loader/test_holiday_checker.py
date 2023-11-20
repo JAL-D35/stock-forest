@@ -33,7 +33,7 @@ def test_is_weekend(input_date: datetime, expected: bool) -> None:
         ("20231117", date(2023, 11, 17)),
         ("20231118", date(2023, 11, 18)),
         ("20231119", date(2023, 11, 19)),
-    ],  # yapf: disable
+    ],
 )
 def test_convert_to_date(input_date: str, expected: datetime) -> None:
     assert convert_to_date(input_date) == expected
