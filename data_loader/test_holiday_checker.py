@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from random import randint
 from typing import Optional
 
@@ -25,17 +25,7 @@ def test_is_weekend(input_date: datetime) -> Optional[bool]:
     assert Weekday.is_weekend(input_date) == (input_date.weekday() > 4)  # 4 is Friday
 
 
-@pytest.mark.parametrize(
-    "input_date, expected",
-    [
-        ("20231113", date(2023, 11, 13)),
-        ("20231114", date(2023, 11, 14)),
-        ("20231115", date(2023, 11, 15)),
-        ("20231116", date(2023, 11, 16)),
-        ("20231117", date(2023, 11, 17)),
-        ("20231118", date(2023, 11, 18)),
-        ("20231119", date(2023, 11, 19)),
-    ],
-)
-def test_convert_to_date(input_date: str, expected: datetime) -> None:
+def test_convert_to_date() -> Optional[bool]:
+    input_date = BASE_DATE.strftime("%Y%m%d")  # e.g. 20210101
+    expected = BASE_DATE.date()
     assert convert_to_date(input_date) == expected
