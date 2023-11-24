@@ -32,6 +32,7 @@ def load_holidays(input_date: str, private_key: str) -> Optional[List[str]]:
         solMonth=converted_date.strftime("%m"),
     )
     holiday_data = get_data(holiday_url, holiday_params)
+
     if not holiday_data:
         return
 
@@ -40,6 +41,7 @@ def load_holidays(input_date: str, private_key: str) -> Optional[List[str]]:
 
     if not holiday_data:
         return
+
     holiday_data = get_holiday_date(holiday_data)
     return holiday_data
 
@@ -49,8 +51,10 @@ def check_holiday_weekend(input_date: str, private_key: str) -> bool:
         return True
 
     holiday_data = load_holidays(input_date, private_key)
-    if not holiday_data:
-        return False
+
+    if not holiday_data:  # If there is no public holiday
+        return False  # must be a weekday
+
     return check_holiday(holiday_data, input_date)
 
 
@@ -73,13 +77,16 @@ def load_stock(
     )
 
     data = get_data(url, params)
+
     if not data:
         return
 
     data = data_to_dict(data)
     data = dict_to_json(data)
-    if not data:
+
+    if not data:  # If there is no data
         return
+
     spark = SparkSession.builder.appName("stock_info").getOrCreate()
     rdd = convert_to_rdd(spark, data)
     df = convert_to_df(spark, rdd)
@@ -98,9 +105,9 @@ def run(
         return
 
     df = load_stock(input_date, private_key, result_type, market_class, n_rows, page_no)
-    if not df:
+
+    if not df:  # If there is no data
         return
 
     clean_output_dir(market_class, input_date)
-
     save_as_parquet(df, market_class, input_date)
