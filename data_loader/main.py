@@ -12,6 +12,7 @@ from .data_loader import (
     generate_url_params,
     get_data,
     save_as_parquet,
+    save_as_text,
 )
 from .holiday_checker import (
     Weekday,
@@ -100,6 +101,7 @@ def run(
     market_class: str,
     n_rows: str,
     page_no: str,
+    output_format: str,
     output_dir: str,
 ) -> None:
     converted_date = convert_to_date(input_date)
@@ -115,4 +117,6 @@ def run(
         return
 
     clean_output_dir(market_class, output_dir)
+    if output_format == "text":
+        save_as_text(df, market_class, output_dir)
     save_as_parquet(df, market_class, output_dir)
