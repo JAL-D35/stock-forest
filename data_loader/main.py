@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 
 from pyspark.sql import DataFrame, SparkSession
@@ -21,15 +22,14 @@ from .holiday_checker import (
 )
 
 
-def load_holidays(input_date: str, private_key: str) -> Optional[List[str]]:
-    converted_date = convert_to_date(input_date)
+def load_holidays(input_date: date, private_key: str) -> Optional[List[str]]:
     holiday_url = (
         "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
     )
     holiday_params = generate_url_params(
         serviceKey=private_key,
-        solYear=converted_date.strftime("%Y"),
-        solMonth=converted_date.strftime("%m"),
+        solYear=input_date.strftime("%Y"),
+        solMonth=input_date.strftime("%m"),
     )
     holiday_data = get_data(holiday_url, holiday_params)
 
@@ -46,8 +46,8 @@ def load_holidays(input_date: str, private_key: str) -> Optional[List[str]]:
     return holiday_data
 
 
-def check_holiday_weekend(input_date: str, private_key: str) -> bool:
-    if Weekday.is_weekend(convert_to_date(input_date)):
+def check_holiday_weekend(input_date: date, private_key: str) -> bool:
+    if Weekday.is_weekend(input_date):
         return True
 
     holiday_data = load_holidays(input_date, private_key)
@@ -55,11 +55,11 @@ def check_holiday_weekend(input_date: str, private_key: str) -> bool:
     if not holiday_data:  # If there is no public holiday
         return False  # must be a weekday
 
-    return check_holiday(holiday_data, input_date)
+    return check_holiday(holiday_data, input_date.strftime("%Y%m%d"))
 
 
 def load_stock(
-    input_date: str,
+    input_date: date,
     private_key: str,
     result_type: str,
     market_class: str,
@@ -73,7 +73,7 @@ def load_stock(
         mrktCls=market_class,
         numOfRows=n_rows,
         pageNo=page_no,
-        basDt=input_date,
+        basDt=input_date.strftime("%Y%m%d"),
     )
 
     data = get_data(url, params)
@@ -100,14 +100,19 @@ def run(
     market_class: str,
     n_rows: str,
     page_no: str,
+    output_dir: str,
 ) -> None:
-    if check_holiday_weekend(input_date, private_key):
+    converted_date = convert_to_date(input_date)
+
+    if check_holiday_weekend(converted_date, private_key):
         return
 
-    df = load_stock(input_date, private_key, result_type, market_class, n_rows, page_no)
+    df = load_stock(
+        converted_date, private_key, result_type, market_class, n_rows, page_no
+    )
 
     if not df:  # If there is no data
         return
 
-    clean_output_dir(market_class, input_date)
-    save_as_parquet(df, market_class, input_date)
+    clean_output_dir(market_class, output_dir)
+    save_as_parquet(df, market_class, output_dir)
