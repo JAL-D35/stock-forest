@@ -24,7 +24,9 @@ def convert_to_date(date_str: str) -> date:
     return datetime.strptime(date_str, "%Y%m%d").date()
 
 
-def get_holiday_info(data: Dict[str, Any]) -> Optional[List[Dict[str, str]]]:
+def get_holiday_info(
+    data: Dict[str, Any]
+) -> Optional[Union[List[Dict[str, str]], Dict[str, str]]]:
     try:
         return data["response"]["body"]["items"]["item"]
     except (KeyError, TypeError):
