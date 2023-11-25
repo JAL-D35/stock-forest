@@ -24,6 +24,23 @@ def test_is_weekend(input_date: datetime, expected: bool) -> None:
 
 
 def test_convert_to_date() -> None:
-    input_date = BASE_DATETIME.strftime("%Y%m%d")  # e.g. 20210101
-    expected = BASE_DATETIME.date()
+    input_date = "20240101"
+    expected = datetime(2024, 1, 1).date()
     assert convert_to_date(input_date) == expected
+
+
+@pytest.mark.parametrize(
+    "input_date",
+    [
+        "240101",
+        "2024-01-01",
+        "2024/01/01",
+        "2024.01.01",
+        "2024.01.01 00:00:00",
+        "ABCDEFGH",
+        "202A0101",
+    ],
+)
+def test_convert_to_date_wrong_format(input_date: str) -> None:
+    with pytest.raises(ValueError):
+        convert_to_date(input_date)
