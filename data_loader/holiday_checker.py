@@ -18,6 +18,9 @@ class Weekday(IntEnum):
 
 
 def convert_to_date(date_str: str) -> date:
+    if len(date_str) != 8 or not date_str.isdecimal():
+        raise ValueError("Invalid date format")
+
     return datetime.strptime(date_str, "%Y%m%d").date()
 
 
