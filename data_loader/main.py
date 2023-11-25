@@ -22,6 +22,8 @@ from .holiday_checker import (
     get_holiday_info,
 )
 
+DATE_FORMAT = "%Y%m%d"
+
 
 def load_holidays(input_date: date, private_key: str) -> Optional[List[str]]:
     holiday_url = (
@@ -56,7 +58,7 @@ def check_holiday_weekend(input_date: date, private_key: str) -> bool:
     if not holidays:  # If there is no public holiday
         return False  # must be a weekday
 
-    return check_holiday(holidays, input_date.strftime("%Y%m%d"))
+    return check_holiday(holidays, input_date.strftime(DATE_FORMAT))
 
 
 def load_stock(
@@ -74,7 +76,7 @@ def load_stock(
         mrktCls=market_class,
         numOfRows=n_rows,
         pageNo=page_no,
-        basDt=input_date.strftime("%Y%m%d"),
+        basDt=input_date.strftime(DATE_FORMAT),
     )
 
     stocks_xml = get_data(url, params)
