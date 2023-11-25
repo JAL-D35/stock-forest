@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
-from random import randint
 
 import pytest
 
 from .holiday_checker import Weekday, convert_to_date
 
-BASE_DATETIME = datetime(randint(0, 2023), randint(1, 12), randint(1, 31))
+BASE_DATETIME = datetime(2024, 1, 1)  # 2024/01/01 is Monday
 
 
 @pytest.mark.parametrize(
