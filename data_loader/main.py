@@ -110,7 +110,12 @@ def run(
         return
 
     df = load_stock(
-        converted_date, private_key, result_type, market_class, n_rows, page_no
+        input_date=converted_date,
+        private_key=private_key,
+        result_type=result_type,
+        market_class=market_class,
+        n_rows=n_rows,
+        page_no=page_no,
     )
 
     if not df:  # If there is no data
