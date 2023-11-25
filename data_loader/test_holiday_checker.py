@@ -8,19 +8,19 @@ BASE_DATETIME = datetime(2024, 1, 1)  # 2024/01/01 is Monday
 
 
 @pytest.mark.parametrize(
-    "input_date",
+    "input_date, expected",
     [
-        BASE_DATETIME,
-        BASE_DATETIME + timedelta(days=1),
-        BASE_DATETIME + timedelta(days=2),
-        BASE_DATETIME + timedelta(days=3),
-        BASE_DATETIME + timedelta(days=4),
-        BASE_DATETIME + timedelta(days=5),
-        BASE_DATETIME + timedelta(days=6),
+        (BASE_DATETIME, False),
+        (BASE_DATETIME + timedelta(days=1), False),
+        (BASE_DATETIME + timedelta(days=2), False),
+        (BASE_DATETIME + timedelta(days=3), False),
+        (BASE_DATETIME + timedelta(days=4), False),
+        (BASE_DATETIME + timedelta(days=5), True),
+        (BASE_DATETIME + timedelta(days=6), True),
     ],
 )
-def test_is_weekend(input_date: datetime) -> None:
-    assert Weekday.is_weekend(input_date) == (input_date.weekday() > 4)  # 4 is Friday
+def test_is_weekend(input_date: datetime, expected: bool) -> None:
+    assert expected == Weekday.is_weekend(input_date)
 
 
 def test_convert_to_date() -> None:
