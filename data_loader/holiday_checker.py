@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from enum import IntEnum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 
 class Weekday(IntEnum):
@@ -31,7 +31,9 @@ def get_holiday_info(data: Dict[str, Any]) -> Optional[List[Dict[str, str]]]:
         return
 
 
-def get_holiday_date(data: List[Dict[str, str]]) -> List[str]:
+def get_holiday_date(data: Union[List[Dict[str, str]], Dict[str, str]]) -> List[str]:
+    if isinstance(data, dict):
+        return [data["locdate"]]
     return [holiday["locdate"] for holiday in data]
 
 
