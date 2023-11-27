@@ -17,7 +17,7 @@ def target_date_generator(start_date: date, delta: int) -> Generator[str, None, 
         yield (start_date + timedelta(days=days)).strftime(DATE_FORMAT)
 
 
-def load_old_data(private_key: str, start_date_str: str) -> None:
+def save_data_local_until_now(private_key: str, start_date_str: str) -> None:
     start_date = convert_to_date(start_date_str)
     end_date = datetime.now().date()
     delta = calculate_delta(start_date, end_date)
