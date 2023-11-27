@@ -12,7 +12,7 @@ def calculate_delta(start_date: date, end_date: date) -> Optional[int]:
         return (end_date - start_date).days
 
 
-def get_target_date(start_date: date, delta: int) -> Generator[str, None, None]:
+def target_date_generator(start_date: date, delta: int) -> Generator[str, None, None]:
     for days in range(delta + 1):
         yield (start_date + timedelta(days=days)).strftime(DATE_FORMAT)
 
@@ -25,7 +25,7 @@ def load_old_data(private_key: str, start_date_str: str) -> None:
     if delta is None:
         return
 
-    for target_date_str in get_target_date(start_date, delta):
+    for target_date_str in target_date_generator(start_date, delta):
         run(
             input_date=target_date_str,
             private_key=private_key,
