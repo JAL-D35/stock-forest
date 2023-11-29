@@ -33,6 +33,10 @@ def get_holiday_info(
         return
 
 
+def check_key_in_dict(input_dict: Dict[str, Any], key: str) -> bool:
+    return key in input_dict
+
+
 def get_holiday_date(data: Union[List[Dict[str, str]], Dict[str, str]]) -> List[str]:
     if isinstance(data, dict):
         return [data["locdate"]]
