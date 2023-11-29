@@ -37,10 +37,16 @@ def check_key_in_dict(input_dict: Dict[str, Any], key: str) -> bool:
     return key in input_dict
 
 
-def get_holiday_date(data: Union[List[Dict[str, str]], Dict[str, str]]) -> List[str]:
+def get_holiday_date(
+    data: Union[List[Dict[str, str]], Dict[str, str]]
+) -> Optional[List[str]]:
     if isinstance(data, dict):
-        return [data["locdate"]]
-    return [holiday["locdate"] for holiday in data]
+        if check_key_in_dict(data, "locdate"):
+            return [data["locdate"]]
+        return
+    return [
+        holiday["locdate"] for holiday in data if check_key_in_dict(holiday, "locdate")
+    ]
 
 
 def check_holiday(holidays: List[str], input_date: str) -> bool:
