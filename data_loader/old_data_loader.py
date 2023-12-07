@@ -9,7 +9,8 @@ def save_data_local_until_now(private_key: str, start_date_str: str) -> None:
     end_date = datetime.now().date()
 
     run(
-        input_date=[start_date_str, end_date.strftime(DATE_FORMAT)],
+        start_date=start_date_str,
+        end_date=end_date.strftime(DATE_FORMAT),
         private_key=private_key,
         result_type="xml",
         market_class="KOSDAQ",

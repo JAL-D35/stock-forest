@@ -107,7 +107,8 @@ def load_stock(
 
 
 def run(
-    input_date: List[str],
+    start_date: str,
+    end_date: str,
     private_key: str,
     result_type: str,
     market_class: str,
@@ -116,7 +117,6 @@ def run(
     output_format: str,
     output_dir: str,
 ) -> None:
-    start_date, end_date = input_date
     converted_start_date = convert_to_date(start_date)
     converted_end_date = convert_to_date(end_date)
     days = calculate_delta_days(converted_start_date, converted_end_date)
