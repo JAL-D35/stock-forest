@@ -1,18 +1,18 @@
-from datetime import date
-from typing import List, Optional
+from datetime import date, timedelta
+from typing import Generator, List, Optional
 
 from pyspark.sql import DataFrame, SparkSession
 
 from .data_loader import (
     clean_output_dir,
+    concat_dataframes,
     convert_to_df,
     convert_to_rdd,
     data_to_dict,
     dict_to_json,
     generate_url_params,
     get_data,
-    save_as_parquet,
-    save_as_text,
+    save_dataframe,
 )
 from .holiday_checker import (
     Weekday,
@@ -61,6 +61,16 @@ def check_holiday_weekend(input_date: date, private_key: str) -> bool:
     return check_holiday(holidays, input_date.strftime(DATE_FORMAT))
 
 
+def calculate_delta_days(start_date: date, end_date: date) -> Optional[int]:
+    if end_date > start_date:
+        return (end_date - start_date).days
+
+
+def target_date_generator(start_date: date, delta: int) -> Generator[date, None, None]:
+    for days in range(delta + 1):
+        yield start_date + timedelta(days=days)
+
+
 def load_stock(
     input_date: date,
     private_key: str,
@@ -97,7 +107,8 @@ def load_stock(
 
 
 def run(
-    input_date: str,
+    start_date: str,
+    end_date: str,
     private_key: str,
     result_type: str,
     market_class: str,
@@ -106,24 +117,34 @@ def run(
     output_format: str,
     output_dir: str,
 ) -> None:
-    converted_date = convert_to_date(input_date)
+    converted_start_date = convert_to_date(start_date)
+    converted_end_date = convert_to_date(end_date)
+    days = calculate_delta_days(converted_start_date, converted_end_date)
 
-    if check_holiday_weekend(converted_date, private_key):
+    if days is None:
         return
 
-    stocks_df = load_stock(
-        input_date=converted_date,
-        private_key=private_key,
-        result_type=result_type,
-        market_class=market_class,
-        n_rows=n_rows,
-        page_no=page_no,
-    )
+    dataframes = []
 
-    if not stocks_df:  # If there is no data
-        return
+    for target_date in target_date_generator(converted_start_date, days):
+        if not check_holiday_weekend(target_date, private_key):
+            stocks_df = load_stock(
+                input_date=target_date,
+                private_key=private_key,
+                result_type=result_type,
+                market_class=market_class,
+                n_rows=n_rows,
+                page_no=page_no,
+            )
+
+            if stocks_df:
+                dataframes.append(stocks_df)
 
     clean_output_dir(market_class, output_dir)
-    if output_format == "text":
-        save_as_text(stocks_df, market_class, output_dir)
-    save_as_parquet(stocks_df, market_class, output_dir)
+
+    save_dataframe(
+        dataframe=concat_dataframes(dataframes),
+        file_format=output_format,
+        partition_value="basDt",
+        output_dir=output_dir,
+    )

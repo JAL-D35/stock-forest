@@ -43,6 +43,17 @@ def convert_to_df(spark: SparkSession, rdd: RDD[str]) -> DataFrame:
     return spark.read.json(rdd)
 
 
+def drop_duplicate(dataframe: DataFrame) -> DataFrame:
+    return dataframe.dropDuplicates()
+
+
+def concat_dataframes(dataframes: List[DataFrame]) -> DataFrame:
+    output_df = dataframes[0]
+    for dataframe in dataframes[1:]:
+        output_df = output_df.union(dataframe)
+    return drop_duplicate(output_df)  # drop duplicate rows
+
+
 def clean_output_dir(mrkt_cls: str, dir_name: str) -> None:
     if exists(f"./{mrkt_cls}_{dir_name}"):
         rmtree(f"./{mrkt_cls}_{dir_name}")
@@ -54,3 +65,9 @@ def save_as_text(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
 
 def save_as_parquet(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
     df.write.parquet(f"./{mrkt_cls}_{dir_name}")
+
+
+def save_dataframe(
+    dataframe: DataFrame, file_format: str, partition_value: str, output_dir: str
+) -> None:
+    dataframe.write.format(file_format).partitionBy(partition_value).save(output_dir)
