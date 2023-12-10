@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from .main import run
+from main import run
 
 DATE_FORMAT = "%Y%m%d"
 

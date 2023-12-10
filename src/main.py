@@ -3,7 +3,7 @@ from typing import Generator, List, Optional
 
 from pyspark.sql import DataFrame, SparkSession
 
-from .data_loader import (
+from data_loader import (
     clean_output_dir,
     concat_dataframes,
     convert_to_df,
@@ -14,7 +14,7 @@ from .data_loader import (
     get_data,
     save_dataframe,
 )
-from .holiday_checker import (
+from holiday_checker import (
     Weekday,
     check_holiday,
     convert_to_date,

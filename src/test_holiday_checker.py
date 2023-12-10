@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from .holiday_checker import Weekday, convert_to_date
+from holiday_checker import Weekday, convert_to_date
 
 BASE_DATETIME = datetime(2024, 1, 1)  # 2024/01/01 is Monday
 
