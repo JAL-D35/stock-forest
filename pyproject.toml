@@ -12,9 +12,8 @@ xmltodict = "^0.13.0"
 pyspark = "^3.5.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.9.1"
-isort = "^5.12.0"
 pre-commit = "^3.5.0"
+ruff = "^0.1.7"
 
 [tool.poetry.group.ci.dependencies]
 pyre-check = "^0.9.19"
@@ -24,9 +23,5 @@ pytest = "^7.4.3"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.isort]
-py_version = 311
-profile = "black"
-
-[tool.black]
-target-version = ["py311"]
+[tool.ruff.lint]
+select = ["E", "F", "I"]
