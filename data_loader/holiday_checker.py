@@ -25,7 +25,7 @@ def convert_to_date(date_str: str) -> date:
 
 
 def get_holiday_info(
-    data: Dict[str, Any]
+    data: Dict[str, Any],
 ) -> Optional[Union[List[Dict[str, str]], Dict[str, str]]]:
     try:
         return data["response"]["body"]["items"]["item"]
@@ -38,7 +38,7 @@ def check_key_in_dict(input_dict: Dict[str, Any], key: str) -> bool:
 
 
 def get_holiday_date(
-    data: Union[List[Dict[str, str]], Dict[str, str]]
+    data: Union[List[Dict[str, str]], Dict[str, str]],
 ) -> Optional[List[str]]:
     if isinstance(data, dict):
         if check_key_in_dict(data, "locdate"):
