@@ -70,4 +70,6 @@ def save_as_parquet(df: DataFrame, mrkt_cls: str, dir_name: str) -> None:
 def save_dataframe(
     dataframe: DataFrame, file_format: str, partition_value: str, output_dir: str
 ) -> None:
-    dataframe.write.format(file_format).partitionBy(partition_value).save(output_dir)
+    dataframe.write.format(file_format).partitionBy(partition_value).save(
+        output_dir, mode="append"
+    )
