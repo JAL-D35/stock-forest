@@ -75,12 +75,6 @@ def save_dataframe(
     )
 
 
-def generate_dtype_dict(*_: P.args, **kwargs: P.kwargs) -> Dict[str, str]:
-    dtype_dict = {}
-    dtype_dict.update(kwargs)
-    return dtype_dict
-
-
 def change_dtype(dataframe: DataFrame, dtype_dict: Dict[str, str]) -> DataFrame:
     for column, dtype in dtype_dict.items():
         dataframe = dataframe.withColumn(column, dataframe[column].cast(dtype))
