@@ -4,13 +4,14 @@ from typing import Generator, List, Optional
 from pyspark.sql import DataFrame, SparkSession
 
 from data_loader import (
+    change_dtype,
     clean_output_dir,
     concat_dataframes,
     convert_to_df,
     convert_to_rdd,
     data_to_dict,
     dict_to_json,
-    generate_url_params,
+    generate_params,
     get_data,
     save_dataframe,
 )
@@ -29,7 +30,7 @@ def load_holidays(input_date: date, private_key: str) -> Optional[List[str]]:
     holiday_url = (
         "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
     )
-    holiday_params = generate_url_params(
+    holiday_params = generate_params(
         serviceKey=private_key,
         solYear=input_date.strftime("%Y"),
         solMonth=input_date.strftime("%m"),
@@ -80,7 +81,7 @@ def load_stock(
     page_no: str,
 ) -> Optional[DataFrame]:
     url = "http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo"
-    params = generate_url_params(
+    params = generate_params(
         serviceKey=private_key,
         resultType=result_type,
         mrktCls=market_class,
@@ -142,8 +143,30 @@ def run(
 
     clean_output_dir(market_class, output_dir)
 
+    dtype_dict = generate_params(
+        clpr="float",
+        fltRt="float",
+        hiprc="float",
+        isinCd="string",
+        itmsNm="string",
+        lopr="float",
+        lstgStCnt="int",
+        mkp="float",
+        mrktCtg="string",
+        mrktTotAmt="float",
+        crtnCd="string",
+        trPrc="float",
+        trqu="float",
+        vs="float",
+        basDt="string",
+    )
+
+    change_dataframes = [
+        change_dtype(dataframe, dtype_dict) for dataframe in dataframes
+    ]
+
     save_dataframe(
-        dataframe=concat_dataframes(dataframes),
+        dataframe=concat_dataframes(change_dataframes),
         file_format=output_format,
         partition_value="basDt",
         output_dir=output_dir,

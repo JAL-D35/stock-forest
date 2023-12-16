@@ -12,7 +12,7 @@ from xmltodict import parse
 P = ParameterSpecification("P")
 
 
-def generate_url_params(*_: P.args, **kwargs: P.kwargs) -> Dict[str, Any]:
+def generate_params(*_: P.args, **kwargs: P.kwargs) -> Dict[str, Any]:
     params = {}
     params.update(kwargs)
     return params
@@ -73,3 +73,9 @@ def save_dataframe(
     dataframe.write.format(file_format).partitionBy(partition_value).save(
         output_dir, mode="append"
     )
+
+
+def change_dtype(dataframe: DataFrame, dtype_dict: Dict[str, str]) -> DataFrame:
+    for column, dtype in dtype_dict.items():
+        dataframe = dataframe.withColumn(column, dataframe[column].cast(dtype))
+    return dataframe
