@@ -12,7 +12,7 @@ from xmltodict import parse
 P = ParameterSpecification("P")
 
 
-def generate_url_params(*_: P.args, **kwargs: P.kwargs) -> Dict[str, Any]:
+def generate_params(*_: P.args, **kwargs: P.kwargs) -> Dict[str, Any]:
     params = {}
     params.update(kwargs)
     return params

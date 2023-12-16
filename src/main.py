@@ -10,7 +10,7 @@ from data_loader import (
     convert_to_rdd,
     data_to_dict,
     dict_to_json,
-    generate_url_params,
+    generate_params,
     get_data,
     save_dataframe,
 )
@@ -29,7 +29,7 @@ def load_holidays(input_date: date, private_key: str) -> Optional[List[str]]:
     holiday_url = (
         "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
     )
-    holiday_params = generate_url_params(
+    holiday_params = generate_params(
         serviceKey=private_key,
         solYear=input_date.strftime("%Y"),
         solMonth=input_date.strftime("%m"),
@@ -80,7 +80,7 @@ def load_stock(
     page_no: str,
 ) -> Optional[DataFrame]:
     url = "http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo"
-    params = generate_url_params(
+    params = generate_params(
         serviceKey=private_key,
         resultType=result_type,
         mrktCls=market_class,
