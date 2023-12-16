@@ -4,6 +4,7 @@ from typing import Generator, List, Optional
 from pyspark.sql import DataFrame, SparkSession
 
 from data_loader import (
+    change_dtype,
     clean_output_dir,
     concat_dataframes,
     convert_to_df,
@@ -142,8 +143,30 @@ def run(
 
     clean_output_dir(market_class, output_dir)
 
+    dtype_dict = generate_params(
+        clpr="float",
+        fltRt="float",
+        hiprc="float",
+        isinCd="string",
+        itmsNm="string",
+        lopr="float",
+        lstgStCnt="int",
+        mkp="float",
+        mrktCtg="string",
+        mrktTotAmt="float",
+        crtnCd="string",
+        trPrc="float",
+        trqu="float",
+        vs="float",
+        basDt="string",
+    )
+
+    change_dataframes = [
+        change_dtype(dataframe, dtype_dict) for dataframe in dataframes
+    ]
+
     save_dataframe(
-        dataframe=concat_dataframes(dataframes),
+        dataframe=concat_dataframes(change_dataframes),
         file_format=output_format,
         partition_value="basDt",
         output_dir=output_dir,
